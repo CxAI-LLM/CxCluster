@@ -1,29 +1,29 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  schedule:
-    - cron: "0 9 * * 1"
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    schedule:
+        - cron: "0 9 * * 1"
 
 permissions:
-  security-events: write
-  contents: read
+    security-events: write
+    contents: read
 
 jobs:
-  analyze:
-    name: CodeQL (${{ matrix.language }})
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [actions]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-      - uses: github/codeql-action/autobuild@v3
-      - uses: github/codeql-action/analyze@v3
+    analyze:
+        name: CodeQL (${{ matrix.language }})
+        runs-on: ubuntu-24.04
+        strategy:
+            fail-fast: false
+            matrix:
+                language: [actions]
+        steps:
+            - uses: actions/checkout@v4
+            - uses: github/codeql-action/init@v3
+              with:
+                  languages: ${{ matrix.language }}
+            - uses: github/codeql-action/autobuild@v3
+            - uses: github/codeql-action/analyze@v3
