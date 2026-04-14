@@ -1,0 +1,36 @@
+name: "CI"
+
+on:
+  push:
+    branches: [main]
+    paths: ["src/**", "composer.json"]
+  pull_request:
+    branches: [main]
+    paths: ["src/**", "composer.json"]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: PHP Lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+
+      - name: Syntax check
+        run: |
+          ERRORS=0
+          for f in $(find src/ -name '*.php'); do
+            php -l "$f" > /dev/null 2>&1 || { echo "✘ $f"; ERRORS=$((ERRORS+1)); }
+          done
+          echo "${ERRORS} syntax errors found"
+          [ $ERRORS -eq 0 ]
+
+      - name: Composer validate
+        run: composer validate --strict --no-check-all
